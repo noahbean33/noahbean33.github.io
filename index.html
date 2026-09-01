@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0A0D14">
-<title>Noah Bean | Embedded Systems Engineer</title>
-<meta name="description" content="Embedded Systems Engineer specializing in PCB design and firmware development, with experience in RTOS, embedded Linux, and hardware validation.">
+<title>Noah Bean | Embedded Systems Engineer in Houston, TX</title>
+<meta name="description" content="Embedded Systems Engineer in Houston, TX open to Electrical, Embedded Systems, and Firmware Engineer roles. Experience in PCB design, firmware, RTOS, embedded Linux, and hardware validation. US citizen, authorized to work without sponsorship.">
 <!-- Open Graph -->
-<meta property="og:title" content="Noah Bean | Embedded Systems Engineer">
-<meta property="og:description" content="Embedded Systems Engineer | PCB Design & Firmware Development">
+<meta property="og:title" content="Noah Bean | Embedded Systems Engineer in Houston, TX">
+<meta property="og:description" content="Open to Electrical, Embedded Systems, and Firmware Engineer roles in Houston, TX | PCB Design & Firmware Development">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://noahbean33.github.io/">
 <!-- Twitter -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Noah Bean | Embedded Systems Engineer">
-<meta name="twitter:description" content="Embedded Systems Engineer | PCB Design & Firmware Development">
+<meta name="twitter:title" content="Noah Bean | Embedded Systems Engineer in Houston, TX">
+<meta name="twitter:description" content="Open to Electrical, Embedded Systems, and Firmware Engineer roles in Houston, TX | PCB Design & Firmware Development">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,8 +33,8 @@
   --acid-dim:  #22C55E;
 
   --text:      #E7EBF3;
-  --muted:     #6C778A;
-  --muted-lo:  #48505F;
+  --muted:     #8A96AB;
+  --muted-lo:  #828FA3;
 
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -131,7 +131,38 @@ p{ margin:0; }
 }
 .nav a.link:hover{ color:var(--text); }
 .nav a.link.active{ color:var(--acid); }
-@media (max-width:720px){ .nav ul{ display:none; } }
+
+.burger{
+  display:none; width:36px; height:36px; padding:0; margin:0;
+  background:transparent; border:1px solid var(--line);
+  align-items:center; justify-content:center; cursor:pointer;
+}
+.burger span, .burger span::before, .burger span::after{
+  content:""; display:block; width:16px; height:2px; background:var(--text);
+  position:relative; transition:transform .25s, opacity .25s, background .25s;
+}
+.burger span::before{ position:absolute; top:-6px; }
+.burger span::after{ position:absolute; top:6px; }
+.burger[aria-expanded="true"] span{ background:transparent; }
+.burger[aria-expanded="true"] span::before{ transform:translateY(6px) rotate(45deg); background:var(--acid); }
+.burger[aria-expanded="true"] span::after{ transform:translateY(-6px) rotate(-45deg); background:var(--acid); }
+
+@media (max-width:720px){
+  .burger{ display:flex; }
+  .nav ul{
+    display:flex; flex-direction:column; gap:0;
+    position:fixed; top:var(--nav-h); left:0; right:0;
+    background:rgba(10,13,20,.97); backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    max-height:calc(100vh - var(--nav-h));
+    overflow-y:auto;
+    transform:translateY(-8px); opacity:0; visibility:hidden;
+    transition:opacity .2s, transform .2s, visibility .2s;
+  }
+  .nav ul.open{ transform:translateY(0); opacity:1; visibility:visible; }
+  .nav li{ border-top:1px solid var(--line); }
+  .nav a.link{ display:block; padding:18px var(--gut); }
+}
 
 /* ============================================================
    HERO
@@ -287,7 +318,8 @@ footer p{ font:400 10px/1.6 var(--mono); letter-spacing:.12em; text-transform:up
 <nav class="nav" id="nav">
   <div class="wrap">
     <a class="mark" href="#top">N<span>·</span>BEAN</a>
-    <ul>
+    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle menu"><span></span></button>
+    <ul id="nav-links">
       <li><a class="link" href="#about">About</a></li>
       <li><a class="link" href="#toolbox">Skills</a></li>
       <li><a class="link" href="#record">Experience</a></li>
@@ -324,6 +356,7 @@ footer p{ font:400 10px/1.6 var(--mono); letter-spacing:.12em; text-transform:up
       <div><dt>Current employer</dt><dd>Langmuir Systems</dd></div>
       <div><dt>Location</dt><dd>Houston, Texas</dd></div>
       <div><dt>Education</dt><dd>B.S. ECE, Oregon State University</dd></div>
+      <div><dt>Work authorization</dt><dd>US citizen, no sponsorship needed</dd></div>
     </dl>
   </div>
 </header>
@@ -510,7 +543,7 @@ footer p{ font:400 10px/1.6 var(--mono); letter-spacing:.12em; text-transform:up
           <p class="row"><span>service</span><span>custom C binary via sysinfo()/procfs</span></p>
           <p class="foot">deploy: <b>systemd oneshot</b>, persistent journal logging</p>
         </div>
-        <a class="more" href="https://github.com/noahbean33" target="_blank" rel="noopener noreferrer">View on GitHub &rarr;</a>
+        <a class="more" href="https://github.com/noahbean33/embedded_linux" target="_blank" rel="noopener noreferrer">View on GitHub &rarr;</a>
       </article>
     </div>
   </div>
@@ -696,6 +729,16 @@ document.querySelectorAll('[data-target]').forEach(el => count.observe(el));
    ============================================================ */
 const nav = document.getElementById('nav');
 addEventListener('scroll', () => nav.classList.toggle('stuck', scrollY > 20), { passive:true });
+
+const burger = document.getElementById('burger');
+const navLinks = document.getElementById('nav-links');
+function setMenu(open){
+  navLinks.classList.toggle('open', open);
+  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+burger.addEventListener('click', () => setMenu(!navLinks.classList.contains('open')));
+navLinks.addEventListener('click', e => { if(e.target.closest('a')) setMenu(false); });
+addEventListener('keydown', e => { if(e.key === 'Escape') setMenu(false); });
 
 const links = [...document.querySelectorAll('.nav a.link')];
 const spy = new IntersectionObserver(es => {
